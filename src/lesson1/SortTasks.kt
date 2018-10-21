@@ -2,6 +2,8 @@
 
 package lesson1
 
+import java.io.File
+
 /**
  * Сортировка времён
  *
@@ -94,8 +96,27 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 99.5
  * 121.3
  */
+// Трудоемкость O(nlog(n))
 fun sortTemperatures(inputName: String, outputName: String) {
-    TODO()
+    val list = mutableListOf<Double>()
+    val outputStream = File(outputName).bufferedWriter()
+    try {
+        for (line in File(inputName).readLines()) {
+            if (line.toDouble() < -273.0 || line.toDouble() > 500.0) {
+                throw IllegalArgumentException("sortTemperatures")
+            }
+            list += line.toDouble()
+        }
+
+        list.sort()
+        for (num in list) {
+            outputStream.write(num.toString())
+            outputStream.newLine()
+        }
+    } catch (e: IllegalArgumentException) {
+        outputStream.newLine()
+    }
+    outputStream.close()
 }
 
 /**
@@ -128,7 +149,40 @@ fun sortTemperatures(inputName: String, outputName: String) {
  * 2
  */
 fun sortSequence(inputName: String, outputName: String) {
-    TODO()
+    val pairs = mutableMapOf<String, Int>()
+    val sequence = mutableListOf<String>()
+    for (line in File(inputName).readLines()) {
+        if (pairs.contains(line)) {
+            val count = pairs.getValue(line)
+            pairs.remove(line)
+            pairs[line] = count + 1
+        } else {
+            pairs[line] = 1
+        }
+        sequence += line
+    }
+    var max = 0
+    var elem = ""
+    for (pair in pairs) {
+        if (pair.value > max || (pair.value == max &&
+                        pair.key.toInt() < elem.toInt())) {
+            max = pair.value
+            elem = pair.key
+        }
+    }
+    val outputStream = File(outputName).bufferedWriter()
+    for (line in sequence) {
+        if (line != elem) {
+            outputStream.write(line)
+            outputStream.newLine()
+        }
+    }
+    while (max != 0) {
+        outputStream.write(elem)
+        outputStream.newLine()
+        max--
+    }
+    outputStream.close()
 }
 
 /**
