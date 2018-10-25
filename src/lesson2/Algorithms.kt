@@ -2,6 +2,8 @@
 
 package lesson2
 
+import java.io.File
+
 /**
  * Получение наибольшей прибыли (она же -- поиск максимального подмассива)
  * Простая
@@ -26,8 +28,29 @@ package lesson2
  *
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
+//Трудоемкость О(N(N+1))
 fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
-    TODO()
+    var ans = Pair(0, 0)
+    var max = 0
+    val list = mutableListOf<Int>()
+    try {
+        for (line in File(inputName).readLines()) {
+            list += line.toInt()
+        }
+        for (i in 0 until list.size) {
+            var next = 0
+            while (i + next + 1 < list.size) {
+                next++
+                if (list[i + next] - list[i] > max) {
+                    max = list[i + next] - list[i]
+                    ans = Pair(i + 1, i + next + 1)
+                }
+            }
+        }
+    } catch (e: IllegalArgumentException) {
+        throw e
+    }
+    return ans
 }
 
 /**
@@ -91,8 +114,34 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * Если имеется несколько самых длинных общих подстрок одной длины,
  * вернуть ту из них, которая встречается раньше в строке first.
  */
+//Трудоемкость О(N^3)
+
 fun longestCommonSubstring(first: String, second: String): String {
-    TODO()
+    val memory = StringBuilder()
+    val ans = StringBuilder()
+    var maxlength = 0
+    for (i in 0 until first.length) {
+        for (j in 0 until second.length) {
+            if (first[i] == second[j]) {
+                var length = 0
+                while (i + length < first.length && j + length < second.length
+                        && first[i + length] == second[j + length]) {
+                    memory.append(first[i + length])
+                    length++
+                }
+                if (length > maxlength) {
+                    if (!ans.isEmpty()) ans.delete(0, ans.length)
+                    ans.append(memory.toString())
+                    maxlength = length
+                }
+                if (!memory.isEmpty()) memory.delete(0, memory.length)
+            }
+        }
+    }
+    if (maxlength == 0) {
+        return ""
+    }
+    return ans.toString()
 }
 
 /**
