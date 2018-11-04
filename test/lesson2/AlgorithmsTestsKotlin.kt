@@ -51,13 +51,7 @@ class AlgorithmsTestsKotlin : AbstractAlgorithmsTests() {
         assertEquals(8 to 12, optimizeBuyAndSell("input/buysell_in2.txt"))
         assertEquals(3 to 4, optimizeBuyAndSell("input/buysell_in3.txt"))
         try {
-            optimizeBuyAndSell("input/buysell_in4.txt")
-        } catch (e: IllegalArgumentException) {
-            assertEquals(1, 1)
-        }
-        try {
-            val expectedAnswer = generatePrices(
-                    1000)
+            val expectedAnswer = generatePrices(1000)
             assertEquals(expectedAnswer, optimizeBuyAndSell("temp_prices.txt"))
         } finally {
             File("temp_prices.txt").delete()

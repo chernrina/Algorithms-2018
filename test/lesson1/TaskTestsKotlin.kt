@@ -38,7 +38,15 @@ class TaskTestsKotlin : AbstractTaskTests() {
         sortTemperatures("input/temp_in2.txt", "temp.txt")
         assertFileContent("temp.txt",
                 """
-
+                    -264.9
+                    -1.0
+                    -1.0
+                    0.1
+                    0.9
+                    23.1
+                    23.2
+                    25.1
+                    247.2
                 """.trimIndent()
         )
         File("temp.txt").delete()

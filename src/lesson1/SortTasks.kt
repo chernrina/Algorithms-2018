@@ -97,23 +97,18 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 121.3
  */
 // Трудоемкость O(nlog(n))
+// Ресурсоемкость О(n)
 fun sortTemperatures(inputName: String, outputName: String) {
     val list = mutableListOf<Double>()
     val outputStream = File(outputName).bufferedWriter()
-    try {
-        for (line in File(inputName).readLines()) {
-            if (line.toDouble() < -273.0 || line.toDouble() > 500.0) {
-                throw IllegalArgumentException("sortTemperatures")
-            }
+    for (line in File(inputName).readLines()) {
+        if (line.toDouble() > -273.0 && line.toDouble() < 500.0) {
             list += line.toDouble()
         }
-
-        list.sort()
-        for (num in list) {
-            outputStream.write(num.toString())
-            outputStream.newLine()
-        }
-    } catch (e: IllegalArgumentException) {
+    }
+    list.sort()
+    for (num in list) {
+        outputStream.write(num.toString())
         outputStream.newLine()
     }
     outputStream.close()
@@ -148,24 +143,27 @@ fun sortTemperatures(inputName: String, outputName: String) {
  * 2
  * 2
  */
+// Трудоемкость О(N)
+// Ресурсоемкость О(m*n) m - количество ключей в map, n - количество элементов в InputName
 fun sortSequence(inputName: String, outputName: String) {
-    val pairs = mutableMapOf<String, Int>()
-    val sequence = mutableListOf<String>()
+    val pairs = mutableMapOf<Int, Int>()
+    val sequence = mutableListOf<Int>()
     for (line in File(inputName).readLines()) {
-        if (pairs.contains(line)) {
-            val count = pairs.getValue(line)
-            pairs.remove(line)
-            pairs[line] = count + 1
+        val lineToInt = line.toInt()
+        if (pairs[lineToInt] != null) {
+            val count = pairs.getValue(lineToInt)
+            pairs.remove(lineToInt)
+            pairs[lineToInt] = count + 1
         } else {
-            pairs[line] = 1
+            pairs[lineToInt] = 1
         }
-        sequence += line
+        sequence += lineToInt
     }
     var max = 0
-    var elem = ""
+    var elem = 0
     for (pair in pairs) {
         if (pair.value > max || (pair.value == max &&
-                        pair.key.toInt() < elem.toInt())) {
+                        pair.key < elem)) {
             max = pair.value
             elem = pair.key
         }
@@ -173,12 +171,12 @@ fun sortSequence(inputName: String, outputName: String) {
     val outputStream = File(outputName).bufferedWriter()
     for (line in sequence) {
         if (line != elem) {
-            outputStream.write(line)
+            outputStream.write(line.toString())
             outputStream.newLine()
         }
     }
     while (max != 0) {
-        outputStream.write(elem)
+        outputStream.write(elem.toString())
         outputStream.newLine()
         max--
     }

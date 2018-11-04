@@ -28,7 +28,8 @@ import java.io.File
  *
  * В случае обнаружения неверного формата файла бросить любое исключение.
  */
-//Трудоемкость О(N(N+1))
+//Трудоемкость О(N^2)
+//Ресурсоемкость О(n)
 fun optimizeBuyAndSell(inputName: String): Pair<Int, Int> {
     var ans = Pair(0, 0)
     var max = 0
@@ -114,32 +115,28 @@ fun josephTask(menNumber: Int, choiceInterval: Int): Int {
  * Если имеется несколько самых длинных общих подстрок одной длины,
  * вернуть ту из них, которая встречается раньше в строке first.
  */
-//Трудоемкость О(N^3)
+//Трудоемкость О(N^2)
+//Ресурсоемкость О(m*n) m - first.length, n - second.length
 
 fun longestCommonSubstring(first: String, second: String): String {
-    val memory = StringBuilder()
     val ans = StringBuilder()
-    var maxlength = 0
+    var maxLength = 0
+    val table = Array(first.length, { IntArray(second.length) })
     for (i in 0 until first.length) {
         for (j in 0 until second.length) {
             if (first[i] == second[j]) {
-                var length = 0
-                while (i + length < first.length && j + length < second.length
-                        && first[i + length] == second[j + length]) {
-                    memory.append(first[i + length])
-                    length++
+                if (i == 0 || j == 0) {
+                    table[i][j] = 1
+                } else {
+                    table[i][j] = table[i - 1][j - 1] + 1
                 }
-                if (length > maxlength) {
+                if (table[i][j] > maxLength) {
+                    maxLength = table[i][j]
                     if (!ans.isEmpty()) ans.delete(0, ans.length)
-                    ans.append(memory.toString())
-                    maxlength = length
+                    ans.append(first.substring(i - maxLength + 1, i + 1))
                 }
-                if (!memory.isEmpty()) memory.delete(0, memory.length)
             }
         }
-    }
-    if (maxlength == 0) {
-        return ""
     }
     return ans.toString()
 }
