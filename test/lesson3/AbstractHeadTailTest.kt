@@ -71,8 +71,6 @@ abstract class AbstractHeadTailTest {
         for (i in 1..9)
             assertFalse(set.contains(i))
         assertTrue(set.contains(10))
-
-
     }
 
     protected fun doHeadSetRelationTest() {

@@ -168,6 +168,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
         return searchSubSet(root, fromElement, toElement, ans);
     }
 
+
     private SortedSet<T> searchSubSet(Node<T> node, T fromElem,
                                       T toElem, SortedSet ans) {
         int compareMin = node.value.compareTo(fromElem);
