@@ -158,33 +158,63 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
      * Для этой задачи нет тестов (есть только заготовка subSetTest), но её тоже можно решить и их написать
      * Очень сложная
      */
+    //Трудоемкость O(n)
+    //Ресурсоемкость О(n)
     @NotNull
     @Override
     public SortedSet<T> subSet(T fromElement, T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        SortedSet<T> ans = new TreeSet<>();
+        if (fromElement.compareTo(toElement) > 0) return ans;
+        return searchSubSet(root, fromElement, toElement, ans);
+    }
+
+    private SortedSet<T> searchSubSet(Node<T> node, T fromElem,
+                                      T toElem, SortedSet ans) {
+        int compareMin = node.value.compareTo(fromElem);
+        int compareMax = node.value.compareTo(toElem);
+        if ((compareMin > 0 && compareMax < 0) ||
+                (compareMax == 0 || compareMin == 0)){
+            ans.add(node.value);
+            if (node.left != null) {
+                searchSubSet(node.left, fromElem, toElem, ans);
+            }
+            if (node.right != null) {
+                searchSubSet(node.right, fromElem, toElem, ans);
+            }
+        }
+        if (compareMin < 0 && node.right != null) {
+            searchSubSet(node.right, fromElem, toElem, ans);
+        }
+        if (compareMax > 0 && node.left != null) {
+            searchSubSet(node.left, fromElem, toElem, ans);
+        }
+        return ans;
     }
 
     /**
      * Найти множество всех элементов меньше заданного
      * Сложная
      */
+    // Трудоемкость O(n^2)
+    // Ресурсоемкость О(n^2)
     @NotNull
     @Override
     public SortedSet<T> headSet(T toElement) {
-        // TODO
-        throw new NotImplementedError();
+        SortedSet<T> ans = subSet(first(), toElement);
+        ans.remove(toElement);
+        return ans;
     }
 
     /**
      * Найти множество всех элементов больше или равных заданного
      * Сложная
      */
+    // Трудоемкость О(n^2)
+    // Ресурсоемкость О(n)
     @NotNull
     @Override
     public SortedSet<T> tailSet(T fromElement) {
-        // TODO
-        throw new NotImplementedError();
+        return subSet(fromElement, last());
     }
 
     @Override

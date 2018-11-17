@@ -40,6 +40,14 @@ abstract class AbstractHeadTailTest {
         for (i in 1..10)
             assertEquals(true, set.contains(i))
 
+        set = tree.headSet(0)
+        assertTrue(set.isEmpty())
+
+        set = tree.headSet(2)
+        assertTrue(set.contains(1))
+        for (i in 2..10)
+            assertFalse(set.contains(i))
+
     }
 
     protected fun doTailSetTest() {
@@ -58,6 +66,12 @@ abstract class AbstractHeadTailTest {
         set = tree.tailSet(-128)
         for (i in 1..10)
             assertEquals(true, set.contains(i))
+
+        set = tree.tailSet(10)
+        for (i in 1..9)
+            assertFalse(set.contains(i))
+        assertTrue(set.contains(10))
+
 
     }
 
@@ -94,7 +108,28 @@ abstract class AbstractHeadTailTest {
     }
 
     protected fun doSubSetTest() {
-        TODO()
+        var set: SortedSet<Int> = tree.subSet(4,9)
+        assertFalse(set.contains(1))
+        assertFalse(set.contains(2))
+        assertFalse(set.contains(3))
+        assertTrue(set.contains(4))
+        assertTrue(set.contains(5))
+        assertTrue(set.contains(6))
+        assertTrue(set.contains(7))
+        assertTrue(set.contains(8))
+        assertTrue(set.contains(9))
+        assertFalse(set.contains(10))
+
+        set = tree.subSet(0, 11)
+        for (i in 1..10)
+            assertTrue(set.contains(i))
+
+        set = tree.subSet(0,0)
+        for(i in 1..10)
+            assertFalse(set.contains(i))
+
+        set = tree.subSet(10, 1)
+        assertTrue(set.isEmpty())
     }
 
 }
