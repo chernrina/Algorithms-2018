@@ -2,6 +2,7 @@ package lesson5;
 
 import kotlin.NotImplementedError;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,9 +34,7 @@ public class JavaGraphTasks {
      * Справка: Эйлеров цикл -- это цикл, проходящий через все рёбра
      * связного графа ровно по одному разу
      */
-    public static List<Graph.Edge> findEulerLoop(Graph graph) {
-        throw new NotImplementedError();
-    }
+    public static List<Graph.Edge> findEulerLoop(Graph graph) { throw new NotImplementedError(); }
 
     /**
      * Минимальное остовное дерево.
@@ -93,8 +92,28 @@ public class JavaGraphTasks {
      *
      * Эта задача может быть зачтена за пятый и шестой урок одновременно
      */
+    // Трудоемкость О(n)
+    // Ресурсоемкость О(m)
+    // n - количество ребер в графе, m - количество вершин в графе
     public static Set<Graph.Vertex> largestIndependentVertexSet(Graph graph) {
-        throw new NotImplementedError();
+        Set<Graph.Vertex> versionFirst = new HashSet<>();
+        Set<Graph.Vertex> versionSecond = new HashSet<>();
+        Set<Graph.Edge> connections = graph.getEdges();
+        for (Graph.Edge c: connections) {
+            Graph.Vertex begin = c.getBegin();
+            Graph.Vertex end = c.getEnd();
+            if (versionFirst.isEmpty() || !versionSecond.contains(begin)) {
+                versionFirst.add(begin);
+                versionSecond.add(end);
+            }
+            if(versionSecond.contains(begin) &&
+                    !versionFirst.contains(end)) versionFirst.add(end);
+            if (versionFirst.contains(begin) &&
+                    !versionSecond.contains(end)) versionSecond.add(end);
+        }
+        if (versionSecond.size() > versionFirst.size()) return versionSecond;
+        else return versionFirst;
+
     }
 
     /**

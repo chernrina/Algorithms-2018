@@ -29,6 +29,10 @@ abstract class AbstractDynamicTests {
 Наследник всех своих родных.
                 """.trimIndent()
         ))
+        assertEquals("1.ноь .", longestCommonSubSequence("1.наибольшая 2.общая",
+                "1.подпоследовательность ."))
+        assertEquals("", longestCommonSubSequence("", " "))
+        assertEquals("sequ", longestCommonSubSequence("assertEquals", "longestCommonSubSequence"))
     }
 
     fun longestIncreasingSubSequence(longestIncreasingSubSequence: (List<Int>) -> List<Int>) {
@@ -44,6 +48,10 @@ abstract class AbstractDynamicTests {
                 23, 76, 34, 93, 123, 21, 56, 87, 91, 12, 45, 98, 140, 12, 5, 38, 349, 65, 94,
                 45, 76, 15, 99, 100, 88, 84, 35, 88
         )))
+        assertEquals(listOf(10), longestIncreasingSubSequence(listOf(10, 9, 8, 7, 6, 5, 4, 3, 2, 1)))
+        assertEquals(listOf(1, 2, 3, 4, 5, 6, 7, 8),
+                longestIncreasingSubSequence(listOf(2, 4, 3, 1, 2, 3, 4, 5, 6, 7, 5, 8)))
+        assertEquals((listOf(1, 2)), longestIncreasingSubSequence(listOf(1, 2, 1, 2, 1, 2, 1, 2, 2, 2)))
     }
 
     fun shortestPathOnField(shortestPathOnField: (String) -> Int) {

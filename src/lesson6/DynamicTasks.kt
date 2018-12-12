@@ -13,8 +13,47 @@ package lesson6
  * Если общей подпоследовательности нет, вернуть пустую строку.
  * При сравнении подстрок, регистр символов *имеет* значение.
  */
+//Трудоемкость О(m*n)
+//Ресурсоемкость О(m*n)
+//m - first.length, n - second.length
 fun longestCommonSubSequence(first: String, second: String): String {
-    TODO()
+    val lcs = Array(first.length + 1, { Array(second.length + 1, { 0 }) })
+    val prev = Array(first.length + 1, { Array(second.length + 1, { Pair(0, 0) }) })
+    for (i in 1..first.length) {
+        for (j in 1..second.length) {
+            if (first[i - 1] == second[j - 1]) {
+                lcs[i][j] = lcs[i - 1][j - 1] + 1
+                prev[i][j] = Pair(i - 1, j - 1)
+            } else {
+                if (lcs[i - 1][j] >= lcs[i][j - 1]) {
+                    lcs[i][j] = lcs[i - 1][j]
+                    prev[i][j] = Pair(i - 1, j)
+                } else {
+                    lcs[i][j] = lcs[i][j - 1]
+                    prev[i][j] = Pair(i, j - 1)
+                }
+            }
+        }
+    }
+    return printLCS(first.length, second.length, prev, first)
+}
+
+fun printLCS(a: Int, b: Int, prev: Array<Array<Pair<Int, Int>>>,
+             first: String): String {
+    val ans = StringBuilder()
+    var i = a
+    var j = b
+    while (i != 0 && j != 0) {
+        if (prev[i][j] == Pair(i - 1, j - 1)) {
+            i--
+            j--
+            ans.append(first[i])
+        } else {
+            if (prev[i][j] == Pair(i - 1, j)) i--
+            else j--
+        }
+    }
+    return ans.toString().reversed()
 }
 
 /**
@@ -29,8 +68,38 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * то вернуть ту, в которой числа расположены раньше (приоритет имеют первые числа).
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
+//Трудоемкость О(n^2)
+//Ресурсоемкость О(n)
+// n - list.size
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
-    TODO()
+    if (list.isEmpty()) return listOf()
+    val size = list.size
+    val prev = Array(size, { 0 })
+    val data = Array(size, { 0 })
+    for (i in 0 until size) {
+        data[i] = 1
+        prev[i] = -1
+        for (j in 0 until i) {
+            if (list[j] < list[i] && data[j] + 1 > data[i]) {
+                data[i] = data[j] + 1
+                prev[i] = j
+            }
+        }
+    }
+    var position = 0
+    var length = data[0]
+    for (i in 0 until size) {
+        if (data[i] > length) {
+            position = i
+            length = data[i]
+        }
+    }
+    val ans = mutableListOf<Int>()
+    while (position != -1) {
+        ans += list[position]
+        position = prev[position]
+    }
+    return ans.reversed()
 }
 
 /**
